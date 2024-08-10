@@ -1,0 +1,118 @@
+[package]
+name = "tokio-tutor"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+anyhow = "1"
+tokio-websockets = { version = "*", default-features = false, features = [
+    "client",
+    "getrandom",
+    "simd",
+    "rustls-webpki-roots",
+    "ring",
+] }
+http = "1.0.0"
+futures-sink = "0.3"
+futures-core = "0.3"
+futures-util = { version = "0.3.14", default-features = false, features = [
+    "sink",
+] }
+sha1_smol = "1.0.0"
+getrandom = "0.2.12"
+tokio-native-tls = "0.3.1"
+ring = "0.17.8"
+mini-redis = "0.4"
+axum = "0.7"
+byteorder = "1.5.0"
+rayon = "1.9.0"
+clap = { version = "4.5.2", features = [
+    "std",
+    "color",
+    "derive",
+    "unicode",
+    "cargo",
+] }
+serde = { version = "1", features = ["std", "derive"] }
+serde_json = "1.0"
+bellman = "0.14"
+rand = "0.8.5"
+ff = "0.13.0"
+pairing = "0.23"
+env_logger = "0.11.3"
+log = "0.4.21"
+pretty_env_logger = "0.5.0"
+dotenvy = "0.15.7"
+envy = "0.4.2"
+#pairing = "0.14.2"
+liquid = "0.26"
+sqlx = { version = "0.7", features = [
+    "runtime-tokio",
+    "macros",
+    "mysql",
+    "time",
+] }
+time = { version = "0.3", default-features = false, features = [
+    "formatting",
+    "macros",
+] }
+thiserror = "1.0"
+regex = "1.10.5"
+chrono = "0.4.38"
+
+
+[dev-dependencies]
+anyhow = "1"
+httpc-test = "0.1"
+
+
+[[bin]]
+name = "thread_tutor"
+path = "src/bin/thread_tutor/main.rs"
+
+[[bin]]
+name = "tokio_tutor"
+path = "src/bin/tokio_tutor/main.rs"
+
+[[bin]]
+name = "ws_client"
+path = "src/bin/ws_client/main.rs"
+
+[[bin]]
+name = "ref_tutor"
+path = "src/bin/ref_tutor/main.rs"
+
+[[bin]]
+name = "axum_todo"
+path = "src/bin/axum_todo/main.rs"
+
+[[bin]]
+name = "miner"
+path = "src/bin/miner/main.rs"
+
+[[bin]]
+name = "enc"
+path = "src/bin/enc/main.rs"
+
+[[bin]]
+name = "railway_example"
+path = "src/bin/railway_example/main.rs"
+
+[[bin]]
+name = "lifetime_example"
+path = "src/bin/lifetime_example/main.rs"
+
+[[bin]]
+name = "sqlx_tutor"
+path = "src/bin/sqlx_tutor/main.rs"
+
+[[bin]]
+name = "howtocodeit"
+path = "src/bin/howtocodeit/main.rs"
+
+[[bin]]
+name = "smart_ptr"
+path = "src/bin/smart_ptr/main.rs"
