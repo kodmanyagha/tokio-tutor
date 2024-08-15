@@ -1,7 +1,9 @@
 #![allow(unused)]
 
-use std::cell::RefCell;
 use std::rc::Rc;
+use std::{cell::RefCell, ops::Sub};
+
+use chrono::{DateTime, Utc};
 
 #[derive(Debug)]
 struct Person {
@@ -34,6 +36,9 @@ fn main() {
     double_ref();
 
     filter_example();
+
+    ptr_example_1();
+    ptr_example_2();
 }
 
 struct User {
@@ -95,4 +100,72 @@ fn filter_vec<'a>(v: &'a [String], filter_str: &'a str) -> impl Iterator<Item = 
 fn fn_once_1(fn1: impl FnOnce() -> String) {
     let str1 = fn1();
     println!("str1: {str1}");
+}
+
+#[derive(Default, Debug)]
+struct Subscription {
+    pub id: u64,
+    pub user_id: u64,
+    pub date: DateTime<Utc>,
+}
+
+fn ptr_example_1() {
+    let mut foo = Box::new(Subscription::default());
+    println!("foo: {:?}", foo.id);
+
+    *foo.as_mut() = Subscription {
+        id: 10,
+        user_id: 20,
+        date: Utc::now(),
+    };
+    println!("foo: {:?}", foo);
+
+    *foo = Subscription {
+        id: 30,
+        user_id: 40,
+        date: Utc::now(),
+    };
+    println!("foo: {:?}", foo);
+}
+
+fn ptr_example_2() {
+    /*
+    You can't directly modify inside an Rc.
+    You can directly modify inside a RefCell, even if you only have a &RefCell<T>.
+    Also, there's not really a reason to put a Box inside an Rc.
+
+    If you want to replace the whole thing, you can do my_ref_cell.replace(new_value)
+    But if you want to get a mutable reference to the stuff inside, you need to do my_ref_cell.borrow_mut()
+    https://doc.rust-lang.org/stable/std/cell/struct.RefCell.html#method.borrow_mut
+    https://doc.rust-lang.org/book/ch15-05-interior-mutability.html
+
+    You can't directly modify inside an Rc.
+    You can directly modify inside a RefCell, even if you only have a &RefCell<T>.
+    Also, there's not really a reason to put a Box inside an Rc.
+
+    can anyone recommend a good benchmark lib?
+    The most popular one is criterion. A newer alternative is divan
+
+    idk
+    ¯\_(ツ)_/¯
+    */
+    let rc1 = Rc::new(Box::new(Subscription::default()));
+    let rc2 = Rc::new(RefCell::new(Subscription::default()));
+    println!("{:?}", rc2);
+
+    *rc2.borrow_mut() = Subscription {
+        id: 50,
+        user_id: 60,
+        ..Default::default()
+    };
+    println!("{:?}", rc2);
+
+    rc2.replace(Subscription {
+        id: 70,
+        user_id: 80,
+        ..Default::default()
+    });
+    println!("{:?}", rc2);
+
+    //Box::into_raw(b)
 }
