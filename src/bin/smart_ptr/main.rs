@@ -1,9 +1,12 @@
 #![allow(unused)]
 
+mod refcell_tutor;
+
 use std::rc::Rc;
 use std::{cell::RefCell, ops::Sub};
 
 use chrono::{DateTime, Utc};
+use refcell_tutor::refcell_borrow_mut;
 
 #[derive(Debug)]
 struct Person {
@@ -39,6 +42,10 @@ fn main() {
 
     ptr_example_1();
     ptr_example_2();
+
+    rc_example_1();
+
+    refcell_borrow_mut();
 }
 
 struct User {
@@ -130,10 +137,6 @@ fn ptr_example_1() {
 
 fn ptr_example_2() {
     /*
-    You can't directly modify inside an Rc.
-    You can directly modify inside a RefCell, even if you only have a &RefCell<T>.
-    Also, there's not really a reason to put a Box inside an Rc.
-
     If you want to replace the whole thing, you can do my_ref_cell.replace(new_value)
     But if you want to get a mutable reference to the stuff inside, you need to do my_ref_cell.borrow_mut()
     https://doc.rust-lang.org/stable/std/cell/struct.RefCell.html#method.borrow_mut
@@ -149,7 +152,9 @@ fn ptr_example_2() {
     idk
     ¯\_(ツ)_/¯
     */
-    let rc1 = Rc::new(Box::new(Subscription::default()));
+    // there's not really a reason to put a Box inside an Rc
+    // let rc1 = Rc::new(Box::new(Subscription::default()));
+
     let rc2 = Rc::new(RefCell::new(Subscription::default()));
     println!("{:?}", rc2);
 
@@ -168,4 +173,49 @@ fn ptr_example_2() {
     println!("{:?}", rc2);
 
     //Box::into_raw(b)
+}
+
+#[derive(Default, Debug)]
+struct Payment {
+    pub amount: f64,
+    pub date: DateTime<Utc>,
+}
+
+fn rc_example_1() {
+    let rcell_val_1 = RefCell::new(10);
+    let mut rcell_mut_val_1 = rcell_val_1.borrow_mut();
+    //let mut rcell_mut_val_2 = rcell_val_1.borrow_mut();
+    //let mut rcell_mut_val_3 = rcell_val_1.borrow_mut();
+
+    *rcell_mut_val_1 = 20;
+
+    // You must drop the mutable reference becaouse at the next line you want to borrow.
+    drop(rcell_mut_val_1);
+
+    println!("Val: {}", rcell_val_1.borrow());
+
+    let rc_payment = Rc::new(RefCell::new(Payment {
+        amount: 10_f64,
+        date: Utc::now(),
+    }));
+
+    // let x = *rc_payment;
+    *rc_payment.borrow_mut() = Payment::default();
+    println!("{:?}", rc_payment);
+
+    rc_payment.replace(Payment::default());
+    println!("{:?}", rc_payment);
+
+    // let rc1 = *rc_payment;
+    *rc_payment.borrow_mut() = Payment::default();
+
+    let mut rc_string = Rc::new("test".to_string());
+    // let x = *rc_string;
+    // *rc_string = "foo".to_string();
+
+    // rc_payment.borrow_mut() = RefCell::new(Payment {
+    // amount: 20_f64,
+    // date: Utc::now(),
+    // });
+    // println!("{:?}", rc_payment);
 }

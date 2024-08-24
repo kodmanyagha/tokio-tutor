@@ -60,7 +60,7 @@ time = { version = "0.3", default-features = false, features = [
     "macros",
 ] }
 thiserror = "1.0"
-regex = "1.10.5"
+regex = "1.10"
 chrono = "0.4.38"
 
 
@@ -72,6 +72,10 @@ httpc-test = "0.1"
 [[bin]]
 name = "thread_tutor"
 path = "src/bin/thread_tutor/main.rs"
+
+[[bin]]
+name = "copy_clone"
+path = "src/bin/copy_clone/main.rs"
 
 [[bin]]
 name = "tokio_tutor"
