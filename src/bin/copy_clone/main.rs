@@ -1,3 +1,7 @@
+use std_ops::std_ops1;
+
+pub mod std_ops;
+
 #[derive(Default, Debug, Clone, Copy)]
 struct Arithmetic {
     pub no1: i32,
@@ -6,6 +10,8 @@ struct Arithmetic {
 fn main() {
     copy1();
     trait1();
+
+    std_ops1();
 }
 
 fn copy1() {

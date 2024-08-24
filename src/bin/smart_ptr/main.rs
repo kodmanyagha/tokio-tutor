@@ -1,12 +1,14 @@
 #![allow(unused)]
 
 mod refcell_tutor;
+mod weak_tutor;
 
 use std::rc::Rc;
 use std::{cell::RefCell, ops::Sub};
 
 use chrono::{DateTime, Utc};
 use refcell_tutor::refcell_borrow_mut;
+use weak_tutor::weak_example;
 
 #[derive(Debug)]
 struct Person {
@@ -46,6 +48,7 @@ fn main() {
     rc_example_1();
 
     refcell_borrow_mut();
+    weak_example();
 }
 
 struct User {
